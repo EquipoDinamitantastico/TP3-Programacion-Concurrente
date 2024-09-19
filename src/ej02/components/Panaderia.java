@@ -8,35 +8,41 @@ public class Panaderia {
 
     // Sincronizamos el acceso al mostrador
 
-    public synchronized void colocarBizcocho() throws InterruptedException{
-        while (bizcochoDisponible){
-            wait();     // pongo en espera porque ya hay un bizcocho en el mostrador
+    public void colocarBizcocho() throws InterruptedException{
+        synchronized (this){
+            while (bizcochoDisponible){
+                wait();     // pongo en espera porque ya hay un bizcocho en el mostrador
+            }
+            bizcochoDisponible = true;
+            System.out.println("Se ha producido un bizcocho!...");
+            notify();
         }
-        bizcochoDisponible = true;
-        System.out.println("Se ha producido un bizcocho!...");
-        notify();
     }
 
-    public synchronized void colocarFactura() throws InterruptedException{
-        while (facturaDisponible){
-            wait();     // pongo en espera porque ya hay un bizcocho en el mostrador
+    public void colocarFactura() throws InterruptedException{
+        synchronized (this){
+            while (facturaDisponible){
+                wait();     // pongo en espera porque ya hay un bizcocho en el mostrador
+            }
+            facturaDisponible = true;
+            System.out.println("Se ha producido una factura!...");
+            notify();
         }
-        facturaDisponible = true;
-        System.out.println("Se ha producido una factura!...");
-        notify();
+
     }
 
 
-    public synchronized void comprar(int numCliente) throws InterruptedException{
-        while (!bizcochoDisponible || !facturaDisponible){
-            System.out.println("Cliente (" + numCliente + ") Esta esperando...");
-            wait();
+    public void comprar(int numCliente) throws InterruptedException{
+        synchronized (this){
+            while (!bizcochoDisponible || !facturaDisponible){
+                System.out.println("Cliente (" + numCliente + ") Esta esperando...");
+                wait();
+            }
+            bizcochoDisponible = false;
+            facturaDisponible = false;
+
+            System.out.println("Cliente (" + numCliente + ") ha comprado bizcocho y factura");
+            notify();
         }
-
-        bizcochoDisponible = false;
-        facturaDisponible = false;
-
-        System.out.println("Cliente (" + numCliente + ") ha comprado bizcocho y factura");
-        notify();
     }
 }
