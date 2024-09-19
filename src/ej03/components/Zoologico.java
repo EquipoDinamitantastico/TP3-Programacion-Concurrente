@@ -22,7 +22,7 @@ public class Zoologico {
         synchronized (this) {
             // Libera el pasillo
             pasilloDisponible = true;
-            notifyAll();  // Notifica a las otras personas que el pasillo está disponible
+            notify();  // Notifica a la primera persona de la cola
         }
     }
 
