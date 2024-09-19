@@ -15,7 +15,6 @@ public class Main {
         new ProductorFactura(panaderia).start();
         new ProductorBizcocho(panaderia).start();
 
-
         // Creamos Clientes y los inciamos para que consuman
         for (int i=1; i<=10; i++){
             new Cliente(panaderia, i).start();
